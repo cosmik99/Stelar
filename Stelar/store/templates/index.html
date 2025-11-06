@@ -1,0 +1,105 @@
+{% load static %} 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stelar E-commerce</title>
+        <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+</head>
+<body>
+
+<header class="site-header">
+    <nav class="navbar">
+        <div class="logo">MiTienda</div>
+            <ul class="nav-links">
+                <li><a href="{% url 'index' %}">Inicio</a></li>
+                <li><a href="{% url 'store' %}">Tienda</a></li>
+                <li><a href="{% url 'signup' %}">Registrarse</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'cart' %}">Carrito</a></li>
+            </ul>
+        <div class="nav-icons">
+            <span>Buscar 🔍</span>
+            <span>Perfil 👤</span>
+            <span>Carrito 🛒</span>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Colección de Otoño</h1>
+            <p>Descubre las últimas tendencias con hasta 40% de descuento.</p>
+            <a href="#" class="cta-button">Comprar Ahora</a>
+        </div>
+    </section>
+
+    <section class="featured-products">
+        <h2>Productos Destacados</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x300?text=Producto+1" alt="Chaqueta Casual">
+                <h3>Chaqueta Casual</h3>
+                <p class="price">$79.99</p>
+                <button class="add-to-cart-btn" data-product-id="101">Añadir al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x300?text=Producto+2" alt="Audífonos Inalámbricos">
+                <h3>Audífonos Inalámbricos</h3>
+                <p class="price">$149.99</p>
+                <button class="add-to-cart-btn" data-product-id="102">Añadir al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x300?text=Producto+3" alt="Zapatillas de Cuero">
+                <h3>Zapatillas de Cuero</h3>
+                <p class="price">$119.99</p>
+                <button class="add-to-cart-btn" data-product-id="103">Añadir al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x300?text=Producto+4" alt="Smartwatch">
+                <h3>Smartwatch Pro</h3>
+                <p class="price">$249.99</p>
+                <button class="add-to-cart-btn" data-product-id="104">Añadir al Carrito</button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>Ayuda</h4>
+                <ul>
+                    <li><a href="#">Preguntas Frecuentes</a></li>
+                    <li><a href="#">Envíos</a></li>
+                    <li><a href="#">Devoluciones</a></li>
+                </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Compañía</h4>
+                <ul>
+                    <li><a href="#">Sobre Nosotros</a></li>
+                    <li><a href="#">Contacto</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Síguenos</h4>
+            <a href="#">Facebook</a> | 
+            <a href="#">Instagram</a> | 
+            <a href="#">Twitter</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 MiTienda. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<script src="{% static 'store/js/script.js' %}"></script>
+</body>
+</html>

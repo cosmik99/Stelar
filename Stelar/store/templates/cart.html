@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Carrito de Compras - {{ block.super }}{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Tu Carrito de Compras</h2>
+
+<div class="row">
+    <div class="col-lg-8">
+        {% if items %}
+            {% for item in items %}
+            <div class="card mb-3 shadow-sm border-0">
+                <div class="row g-0">
+                    <div class="col-md-2">
+                        <img src="{{ item.product.imageURL|default:'https://via.placeholder.com/150' }}" class="img-fluid rounded-start" alt="{{ item.product.name }}">
+                    </div>
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.product.name }}</h5>
+                            <p class="card-text">Cantidad: {{ item.quantity }}</p>
+                            <p class="card-text fw-bold">Precio: ${{ item.product.price }}</p>
+                            <p class="card-text fw-bold text-primary">Subtotal: ${{ item.get_total }}</p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                Tu carrito está vacío. <a href="{% url 'index' %}" class="alert-link">¡Empieza a comprar!</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h4 class="card-title text-center mb-3">Resumen del Pedido</h4>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Items
+                        <span>{{ order.get_cart_items }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center fw-bold h5">
+                        Total
+                        <span class="text-primary">${{ order.get_cart_total }}</span>
+                    </li>
+                </ul>
+                <a href="{% url 'checkout' %}" class="btn btn-primary w-100 mt-3">Proceder al Pago</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
