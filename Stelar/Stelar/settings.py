@@ -135,3 +135,7 @@ MEDIA_URL = '/Stelar/'
 
 # MEDIA_ROOT: La ruta absoluta del sistema de archivos donde se guardarán los archivos.
 MEDIA_ROOT = BASE_DIR / 'media'
+
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/profile'
+LOGOUT_REDIRECT_URL = '/login'
