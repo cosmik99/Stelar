@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 # store/views/cart.py (Versión Corregida)
+=======
+# store/views/cart.py
+from django.shortcuts import render, redirect
+from django.views import View
+from core.models import Products  
+>>>>>>> bc6ce90f4241f982d1f5abf3e7c67db88093f6b1
 
 from django.shortcuts import render, redirect
 from django.views import View
@@ -41,6 +48,7 @@ class Cart(View):
 
         # Esto funciona bien si el template 'cart.html' usa 'items' y 'order'
         return render(request, 'cart.html', context)
+<<<<<<< HEAD
 
 
 # --- 2. Vista para MANEJAR la acción de agregar/quitar (POST /cart-action/) ---
@@ -76,3 +84,19 @@ class CartHandler(View):
         return_url = request.POST.get('return_url') or 'store'
         # Redirige para forzar la recarga de la página, lo que activa el GET
         return redirect(return_url)
+=======
+    
+# 🚀 ADICIÓN DEL MÉTODO POST (Necesario para romper el bucle) 🚀
+    def post(self, request):
+        
+        # Aunque esta función debería manejar la lógica de actualizar la sesión
+        # al usar los botones de añadir/quitar del carrito...
+        
+        # Por ahora, solo necesitamos asegurarnos de que la vista POST exista
+        # y use la redirección correcta para seguir el patrón PRG (Post/Redirect/Get),
+        # lo cual es crucial para evitar el bucle.
+        
+        return redirect('cart')
+
+#prueba de conexion
+>>>>>>> bc6ce90f4241f982d1f5abf3e7c67db88093f6b1
