@@ -36,3 +36,5 @@ urlpatterns = [
     path('search/', search_view, name='search'),
     path('profile/', Profile.as_view(), name='profile'),
 ]
+
+#prueba de conexion

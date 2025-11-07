@@ -52,3 +52,5 @@ class Cart(View):
         # lo cual es crucial para evitar el bucle.
         
         return redirect('cart')
+
+#prueba de conexion
