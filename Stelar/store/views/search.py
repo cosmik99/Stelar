@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.db.models import Q
-from ..models import Product  # Importa el modelo desde la carpeta raíz
+from ..models import Product  
 
 def search_view(request):
     query = request.GET.get('q', '')

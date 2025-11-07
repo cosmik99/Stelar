@@ -1,8 +1,19 @@
 # store/views/profile.py
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.views import View
+from store.models import Customer
 
-@login_required
-def profile_view(request):
-    user = request.user
-    return render(request, 'profile.html', {'user': user})
+class Profile(View):
+    def get(self, request):
+        
+        customer_id = request.session.get('customer_id')
+
+        if not customer_id:
+            return redirect('login')
+
+        try:
+            customer = Customer.objects.get(id=customer_id)
+        except Customer.DoesNotExist:
+            return redirect('login')
+
+        return render(request, 'profile.html', {'customer': customer})

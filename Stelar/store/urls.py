@@ -2,39 +2,37 @@
 
 from django.contrib import admin
 from django.urls import path
-# 1. IMPORTA RedirectView
-from django.views.generic.base import RedirectView 
+from django.views.generic.base import RedirectView
+from django.shortcuts import redirect
 
-# Tus imports de vistas
+# Vistas importadas
 from .views.home import Index, store
 from .views.signup import Signup
-from .views.login import Login, logout
+from .views.login import Login
 from .views.cart import Cart
 from .views.checkout import CheckOut
 from .views.orders import OrderView
 from .middlewares.auth import auth_middleware
 from .views.search import search_view
-from .views.profile import profile_view
+from .views.profile import Profile
 
+# Vista de logout como función
+def logout(request):
+    request.session.clear()
+    return redirect('login')
 
 urlpatterns = [
-    # 2. CAMBIA ESTA LÍNEA
-    # Ahora la ruta raíz ('') redirige a la ruta con name='store'
-    # Mantenemos name='index' para que otros enlaces no se rompan.
+    # Redirección de raíz a tienda
     path('', RedirectView.as_view(pattern_name='store', permanent=False), name='index'),
 
-    # 3. ESTA ES LA RUTA DE DESTINO
-    # (La vista 'store' se muestra en la URL '/tienda/')
+    # Rutas principales
     path('tienda/', store, name='store'),
-    
-    # --- El resto de tus rutas ---
-    path('signup', Signup.as_view(), name='signup'),
-    path('login', Login.as_view(), name='login'),
-    path('logout', logout, name='logout'),
-    path('cart', auth_middleware(Cart.as_view()), name='cart'),
-    path('check-out', CheckOut.as_view(), name='checkout'),
-    path('orders', auth_middleware(OrderView.as_view()), name='orders'),
+    path('signup/', Signup.as_view(), name='signup'),
+    path('login/', Login.as_view(), name='login'),
+    path('logout/', logout, name='logout'),
+    path('cart/', auth_middleware(Cart.as_view()), name='cart'),
+    path('check-out/', CheckOut.as_view(), name='checkout'),
+    path('orders/', auth_middleware(OrderView.as_view()), name='orders'),
     path('search/', search_view, name='search'),
-    path('cart/', Cart.as_view(), name='cart'),
-    path('profile/', profile_view, name='profile'),
+    path('profile/', Profile.as_view(), name='profile'),
 ]
