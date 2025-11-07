@@ -25,6 +25,13 @@
                 
                 <form method="POST" action="{% url 'login' %}" id="loginForm">
                     {% csrf_token %}
+
+                    {# 🔑 AGREGAMOS ESTE BLOQUE: Campo oculto para manejar la redirección post-login #}
+                    {% if return_url %}
+                        <input type="hidden" name="return_url" value="{{ return_url }}">
+                    {% endif %}
+                    {# ------------------------------------------------------------------------ #}
+
                     {% crispy form %}
                     <button type="submit" class="btn btn-primary w-100 mt-3">Ingresar</button>
                 </form>

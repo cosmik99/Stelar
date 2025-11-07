@@ -1,38 +1,39 @@
 # store/urls.py
 
-from django.contrib import admin
 from django.urls import path
 from django.views.generic.base import RedirectView
-from django.shortcuts import redirect
 
-# Vistas importadas
-from .views.home import Index, store
+from .views.home import store
 from .views.signup import Signup
-from .views.login import Login
-from .views.cart import Cart
+from .views.login import Login, logout_user
+from .views.cart import CartHandler, Cart 
 from .views.checkout import CheckOut
 from .views.orders import OrderView
-from .middlewares.auth import auth_middleware
-from .views.search import search_view
 from .views.profile import Profile
+from .views.search import search_view
 
-# Vista de logout como función
-def logout(request):
-    request.session.clear()
-    return redirect('login')
 
 urlpatterns = [
-    # Redirección de raíz a tienda
-    path('', RedirectView.as_view(pattern_name='store', permanent=False), name='index'),
-
-    # Rutas principales
+    # Ruta principal que redirige a 'store'
+    path('', RedirectView.as_view(pattern_name='store', permanent=False), name='index'), 
+    
+    # Rutas de la tienda
     path('tienda/', store, name='store'),
+    
+    # Rutas de autenticación
     path('signup/', Signup.as_view(), name='signup'),
     path('login/', Login.as_view(), name='login'),
-    path('logout/', logout, name='logout'),
-    path('cart/', auth_middleware(Cart.as_view()), name='cart'),
-    path('check-out/', CheckOut.as_view(), name='checkout'),
-    path('orders/', auth_middleware(OrderView.as_view()), name='orders'),
-    path('search/', search_view, name='search'),
-    path('profile/', Profile.as_view(), name='profile'),
+    path('logout/', logout_user, name='logout'), # Si tienes una vista de logout
+    
+    # Rutas del carrito (CartHandler maneja el POST, Cart maneja el GET)
+    path('cart/', Cart.as_view(), name='cart'),
+    path('cart-action/', CartHandler.as_view(), name='cart-action'),
+    
+    # Rutas de compra y órdenes
+    path('checkout/', CheckOut.as_view(), name='checkout'),
+    path('orders/', OrderView.as_view(), name='orders'), # Si tienes OrderView
+    
+    # Ruta de perfilA
+    path('profile/', Profile.as_view(), name='profile'), # Si tienes Profile
+    path('search/', search_view, name='search')
 ]

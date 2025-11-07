@@ -1,56 +1,65 @@
-from django.shortcuts import render, redirect, HttpResponseRedirect
-from core.models import Products, Category
+# store/views/home.py
+
+from django.shortcuts import render, redirect
+# Asegúrate de importar Products y Category desde donde estén definidos
+from core.models import Products, Category 
 from django.views import View
 
-
-# Create your views here.
-class Index(View):
-
-    def post(self, request):
-        product = request.POST.get('product')
-        remove = request.POST.get('remove')
-        cart = request.session.get('cart')
-        if cart:
-            quantity = cart.get(product)
-            if quantity:
-                if remove:
-                    if quantity <= 1:
-                        cart.pop(product)
-                    else:
-                        cart[product] = quantity-1
-                else:
-                    cart[product] = quantity+1
-
-            else:
-                cart[product] = 1
-        else:
-            cart = {}
-            cart[product] = 1
-
-        request.session['cart'] = cart
-        print('cart', request.session['cart'])
-        return redirect('homepage')
-
-    def get(self, request):
-        # print()
-        return HttpResponseRedirect(f'/store{request.get_full_path()[1:]}')
-
-
 def store(request):
-    cart = request.session.get('cart')
-    if not cart:
-        request.session['cart'] = {}
+    """
+    Maneja la vista de la tienda, incluyendo el filtrado por categoría 
+    y el procesamiento de datos del carrito para el resumen.
+    """
+    
+    request.session.setdefault('cart', {}) 
+    
+    # --- Lógica de filtrado de productos (Se mantiene igual) ---
     products = None
     categories = Category.get_all_categories()
     categoryID = request.GET.get('category')
+    
     if categoryID:
-        products = Products.get_all_products_by_categoryid(categoryID)
+        try:
+            categoryID = int(categoryID)
+            products = Products.get_all_products_by_categoryid(categoryID)
+        except ValueError:
+            products = Products.get_all_products()
     else:
         products = Products.get_all_products()
 
-    data = {}
-    data['products'] = products
-    data['categories'] = categories
+    # --- Lógica de PROCESAMIENTO del Carrito para el Resumen (AÑADIDA) ---
+    cart = request.session.get('cart', {})
+    items = []
+    total = 0
 
-    print('you are : ', request.session.get('email'))
+    if cart:
+        # Importante: Obtener solo los productos cuyos IDs están en el carrito
+        products_in_cart = Products.objects.filter(id__in=cart.keys())
+
+        for product in products_in_cart:
+            quantity = cart[str(product.id)] 
+            subtotal = product.price * quantity
+
+            items.append({
+                'product': product,
+                'quantity': quantity,
+                'get_total': subtotal,
+            })
+            total += subtotal
+
+    order = {
+        'get_cart_total': total,
+        'get_cart_items': sum(item['quantity'] for item in items),
+    }
+    # ----------------------------------------------------------------------
+    
+    data = {
+        'products': products,
+        'categories': categories,
+        'items': items,    # <-- CLAVE: Los ítems procesados
+        'order': order,    # <-- CLAVE: Los totales
+    }
+
+    print('Usuario logueado: ', request.session.get('customer_email'))
+    # Asumimos que el template principal es 'index.html'
     return render(request, 'index.html', data)

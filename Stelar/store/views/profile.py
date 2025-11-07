@@ -17,3 +17,4 @@ class Profile(View):
             return redirect('login')
 
         return render(request, 'profile.html', {'customer': customer})
+
