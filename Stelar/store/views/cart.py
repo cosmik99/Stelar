@@ -1,40 +1,31 @@
-<<<<<<< HEAD
-# store/views/cart.py (Versión Corregida)
-=======
-# store/views/cart.py
 from django.shortcuts import render, redirect
 from django.views import View
-from core.models import Products  
->>>>>>> bc6ce90f4241f982d1f5abf3e7c67db88093f6b1
+from store.models import Product 
 
-from django.shortcuts import render, redirect
-from django.views import View
-from core.models import Products 
 
 # --- 1. Vista para MOSTRAR el carrito (GET /cart/) ---
+# Asegúrate de que esta clase comience al borde izquierdo.
 class Cart(View):
     def get(self, request):
         
-        # El procesamiento de la lógica es CORRECTO para la página /cart/
         cart = request.session.get('cart', {})
-
         items = []
         total = 0
 
         if cart:
-            products = Products.objects.filter(id__in=cart.keys())
+            products = Product.objects.filter(id__in=cart.keys())
 
             for product in products:
-                quantity = cart[str(product.id)]
-                subtotal = product.price * quantity
-
-                items.append({
-                    'product': product,
-                    'quantity': quantity,
-                    'get_total': subtotal,
-                })
-
-                total += subtotal
+                quantity = cart.get(str(product.id), 0)
+                # 🟢 Aseguramos que la cantidad exista y sea positiva
+                if quantity: 
+                    subtotal = product.price * quantity
+                    items.append({
+                        'product': product,
+                        'quantity': quantity,
+                        'get_total': subtotal,
+                    })
+                    total += subtotal
         
         order = {
             'get_cart_total': total,
@@ -46,21 +37,20 @@ class Cart(View):
             'order': order,
         }
 
-        # Esto funciona bien si el template 'cart.html' usa 'items' y 'order'
         return render(request, 'cart.html', context)
-<<<<<<< HEAD
-
 
 # --- 2. Vista para MANEJAR la acción de agregar/quitar (POST /cart-action/) ---
-# Esta clase debe estar aquí para que puedas importarla en urls.py
+# Asegúrate de que esta clase comience al borde izquierdo.
 class CartHandler(View):
     """
-    Se encarga exclusivamente de la lógica POST
-    de agregar, quitar o actualizar productos del carrito.
+    Se encarga de la lógica POST para agregar, quitar o actualizar productos del carrito.
     """
+    
     def post(self, request):
+        
         product_id = request.POST.get('product')
         remove = request.POST.get('remove') == 'True' 
+        
         cart = request.session.get('cart', {})
 
         if product_id:
@@ -76,27 +66,9 @@ class CartHandler(View):
                 cart[product_id] = quantity + 1
 
             request.session['cart'] = cart
-            # Siempre es vital marcar la sesión como modificada
             request.session.modified = True 
             
-        print('Cart actualizado:', request.session['cart'])
+        print('Cart actualizado:', request.session.get('cart'))
         
         return_url = request.POST.get('return_url') or 'store'
-        # Redirige para forzar la recarga de la página, lo que activa el GET
         return redirect(return_url)
-=======
-    
-# 🚀 ADICIÓN DEL MÉTODO POST (Necesario para romper el bucle) 🚀
-    def post(self, request):
-        
-        # Aunque esta función debería manejar la lógica de actualizar la sesión
-        # al usar los botones de añadir/quitar del carrito...
-        
-        # Por ahora, solo necesitamos asegurarnos de que la vista POST exista
-        # y use la redirección correcta para seguir el patrón PRG (Post/Redirect/Get),
-        # lo cual es crucial para evitar el bucle.
-        
-        return redirect('cart')
-
-#prueba de conexion
->>>>>>> bc6ce90f4241f982d1f5abf3e7c67db88093f6b1

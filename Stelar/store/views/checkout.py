@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import check_password
 from django.views import View
-from core.models import Products, Order, Customer
+from core.models import Product, Order, Customer
 
 class CheckOut(View):
     def post(self, request):
@@ -9,7 +9,7 @@ class CheckOut(View):
         phone = request.POST.get('phone')
         customer = request.session.get('customer')
         cart = request.session.get('cart')
-        products = Products.get_products_by_id(list(cart.keys()))
+        products = Product.get_products_by_id(list(cart.keys()))
         print(address, phone, customer, cart, products)
 
         for product in products:

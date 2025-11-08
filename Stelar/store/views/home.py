@@ -1,9 +1,9 @@
-# store/views/home.py
-
 from django.shortcuts import render, redirect
-# Asegúrate de importar Products y Category desde donde estén definidos
-from core.models import Products, Category 
 from django.views import View
+
+# 🟢 Importación relativa (asumimos que resuelve el error anterior)
+from ..models import Product, Category 
+
 
 def store(request):
     """
@@ -13,19 +13,19 @@ def store(request):
     
     request.session.setdefault('cart', {}) 
     
-    # --- Lógica de filtrado de productos (Se mantiene igual) ---
-    products = None
+    # --- Lógica de filtrado de productos ---
+    products = None 
     categories = Category.get_all_categories()
     categoryID = request.GET.get('category')
     
     if categoryID:
         try:
             categoryID = int(categoryID)
-            products = Products.get_all_products_by_categoryid(categoryID)
+            products = Product.get_all_products_by_categoryid(categoryID)
         except ValueError:
-            products = Products.get_all_products()
+            products = Product.get_all_products()
     else:
-        products = Products.get_all_products()
+        products = Product.get_all_products()
 
     # --- Lógica de PROCESAMIENTO del Carrito para el Resumen (AÑADIDA) ---
     cart = request.session.get('cart', {})
@@ -33,19 +33,20 @@ def store(request):
     total = 0
 
     if cart:
-        # Importante: Obtener solo los productos cuyos IDs están en el carrito
-        products_in_cart = Products.objects.filter(id__in=cart.keys())
+        # Aquí falló antes porque Product era None
+        products_in_cart = Product.objects.filter(id__in=cart.keys())
 
         for product in products_in_cart:
-            quantity = cart[str(product.id)] 
-            subtotal = product.price * quantity
-
-            items.append({
-                'product': product,
-                'quantity': quantity,
-                'get_total': subtotal,
-            })
-            total += subtotal
+            quantity = cart.get(str(product.id))
+            if quantity:
+                subtotal = product.price * quantity
+                items.append({
+                    'product': product,
+                    'quantity': quantity,
+                    'get_total': subtotal,
+                })
+                # 🟢 CORRECCIÓN CLAVE: Mover la suma del total dentro del 'if'
+                total += subtotal 
 
     order = {
         'get_cart_total': total,
@@ -56,10 +57,9 @@ def store(request):
     data = {
         'products': products,
         'categories': categories,
-        'items': items,    # <-- CLAVE: Los ítems procesados
-        'order': order,    # <-- CLAVE: Los totales
+        'items': items, 
+        'order': order,
     }
 
     print('Usuario logueado: ', request.session.get('customer_email'))
-    # Asumimos que el template principal es 'index.html'
     return render(request, 'index.html', data)
