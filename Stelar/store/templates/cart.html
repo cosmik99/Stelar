@@ -11,24 +11,33 @@
         {% if items %}
             {% for item in items %}
             <div class="card mb-3 shadow-sm border-0">
-                <div class="row g-0">
-                    <div class="col-md-2">
-                        <img src="{{ item.product.imageURL|default:'https://via.placeholder.com/150' }}" class="img-fluid rounded-start" alt="{{ item.product.name }}">
+                <div class="row g-0 align-items-center">
+                    <div class="col-md-3 d-flex justify-content-center align-items-center p-3">
+                       
+                        <div class="product-image-wrapper">
+                            <img 
+                                src="{{ item.product.imageURL|default:'https://via.placeholder.com/150' }}" 
+                                alt="{{ item.product.name }}" 
+                                class="product-image"
+                                loading="lazy"
+                            >
+                        </div>
                     </div>
-                    <div class="col-md-10">
+                    <div class="col-md-9">
                         <div class="card-body">
                             <h5 class="card-title">{{ item.product.name }}</h5>
                             <p class="card-text">Cantidad: {{ item.quantity }}</p>
                             <p class="card-text fw-bold">Precio: ${{ item.product.price }}</p>
                             <p class="card-text fw-bold text-primary">Subtotal: ${{ item.get_total }}</p>
-                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             {% endfor %}
         {% else %}
             <div class="alert alert-info" role="alert">
-                Tu carrito está vacío. <a href="{% url 'index' %}" class="alert-link">¡Empieza a comprar!</a>
+                Tu carrito está vacío. 
+                <a href="{% url 'index' %}" class="alert-link">¡Empieza a comprar!</a>
             </div>
         {% endif %}
     </div>
@@ -52,4 +61,35 @@
         </div>
     </div>
 </div>
+
+<style>
+
+.product-image-wrapper {
+    width: 130px;
+    height: 130px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 📱 Adaptación móvil */
+@media (max-width: 768px) {
+    .product-image-wrapper {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 10px;
+    }
+}
+</style>
+
 {% endblock %}

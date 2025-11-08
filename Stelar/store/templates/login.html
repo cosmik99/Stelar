@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 
 {% block title %}Iniciar Sesión - {{ block.super }}{% endblock %}
 
@@ -10,29 +9,36 @@
             <div class="card-body">
                 <h2 class="card-title text-center mb-4">Iniciar Sesión</h2>
 
-                
+                <!-- Mensajes de Django -->
                 {% if messages %}
                     {% for message in messages %}
                         <div class="alert alert-{{ message.tags }}">{{ message }}</div>
                     {% endfor %}
                 {% endif %}
 
-                
+                <!-- Mensajes de error manual -->
                 {% if error %}
                     <div class="alert alert-danger text-center">{{ error }}</div>
                 {% endif %}
 
-                
                 <form method="POST" action="{% url 'login' %}" id="loginForm">
                     {% csrf_token %}
 
-                    {# 🔑 AGREGAMOS ESTE BLOQUE: Campo oculto para manejar la redirección post-login #}
                     {% if return_url %}
                         <input type="hidden" name="return_url" value="{{ return_url }}">
                     {% endif %}
-                    {# ------------------------------------------------------------------------ #}
 
-                    {% crispy form %}
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email*</label>
+                        <input type="email" name="email" id="email" class="form-control"
+                               value="{{ email|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña*</label>
+                        <input type="password" name="password" id="password" class="form-control" required>
+                    </div>
+
                     <button type="submit" class="btn btn-primary w-100 mt-3">Ingresar</button>
                 </form>
 
@@ -45,10 +51,9 @@
     </div>
 </div>
 
-
 <script>
 document.getElementById("loginForm").addEventListener("submit", function() {
-    console.log("🚀 Intentando iniciar sesión...");
+    console.log("🚀 Enviando formulario de login...");
 });
 </script>
 {% endblock %}
