@@ -15,14 +15,19 @@
         <div class="row">
             {% for product in results %}
                 <div class="col-md-3 mb-3">
-                    <div class="card h-100">
+                    <!-- 🟢 Tarjeta clickeable -->
+                    <div class="card h-100 product-card"
+                         onclick="window.location.href='{% url 'product_detail' product.id %}'">
                         {% if product.image %}
-                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                            <div class="image-container">
+                                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                            </div>
                         {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">{{ product.name }}</h5>
                             <p class="card-text">{{ product.description|truncatewords:20 }}</p>
-                            <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-outline-primary">Ver más</a>
+                            <a href="{% url 'product_detail' product.id %}" 
+                               class="btn btn-sm btn-outline-primary">Ver más</a>
                         </div>
                     </div>
                 </div>
@@ -32,4 +37,34 @@
         <p>No se encontraron resultados.</p>
     {% endif %}
 </div>
+
+<style>
+/* 🟢 Animación al pasar el cursor */
+.product-card {
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* 🖼 Efecto zoom en imagen */
+.image-container {
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+}
+
+.image-container img {
+    transition: transform 0.4s ease;
+}
+
+.product-card:hover .image-container img {
+    transform: scale(1.07);
+}
+</style>
 {% endblock %}

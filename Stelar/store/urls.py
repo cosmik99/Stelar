@@ -10,6 +10,7 @@ from .views.checkout import CheckOut
 from .views.orders import OrderView
 from .views.profile import Profile
 from .views.search import search_view
+from .views.product_detail import product_detail
 
 
 urlpatterns = [
@@ -37,4 +38,5 @@ urlpatterns = [
 
     # --- Búsqueda ---
     path('search/', search_view, name='search'),
+    path('product/<int:product_id>/', product_detail, name='product_detail'),
 ]
