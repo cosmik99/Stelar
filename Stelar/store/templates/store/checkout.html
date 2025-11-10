@@ -31,7 +31,42 @@
                             <input type="text" class="form-control" id="zipcode" name="zipcode" required>
                         </div>
                     </div>
+
                     <hr class="my-4">
+
+                    <h4 class="mb-3">Selecciona tu empresa de envío</h4>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="shipping-option w-100">
+                                <input type="radio" name="shipping_company" value="Empresa 1" class="form-check-input d-none" required>
+                                <div class="card text-center border shadow-sm p-3">
+                                    <h5 class="mb-1">Empresa 1</h5>
+                                    <small class="text-muted">Servicio estándar</small>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="shipping-option w-100">
+                                <input type="radio" name="shipping_company" value="Empresa 2" class="form-check-input d-none" required>
+                                <div class="card text-center border shadow-sm p-3">
+                                    <h5 class="mb-1">Empresa 2</h5>
+                                    <small class="text-muted">Entrega económica</small>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="shipping-option w-100">
+                                <input type="radio" name="shipping_company" value="Empresa 3" class="form-check-input d-none" required>
+                                <div class="card text-center border shadow-sm p-3">
+                                    <h5 class="mb-1">Empresa 3</h5>
+                                    <small class="text-muted">Servicio exprés</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
                     <button class="btn btn-primary w-100" type="submit">Finalizar Pedido</button>
                 </form>
             </div>
@@ -62,4 +97,24 @@
         </div>
     </div>
 </div>
+
+<style>
+.shipping-option .card {
+    transition: all 0.2s ease-in-out;
+    border-radius: 0.75rem;
+}
+
+.shipping-option .card:hover {
+    transform: translateY(-3px);
+    border-color: #0d6efd;
+    box-shadow: 0 0.5rem 1rem rgba(13, 110, 253, 0.15);
+}
+
+.shipping-option input:checked + .card {
+    background-color: #0d6efd;
+    color: #fff;
+    border-color: #0d6efd;
+}
+</style>
+
 {% endblock %}
