@@ -15,7 +15,17 @@
         .cart-item-list hr { margin: 10px 0; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
         .product-card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; text-align: center; }
-        .product-card img { max-width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; }
+        .product-card img { 
+            width: 250px;       /* 🎉 Nuevo: Ancho fijo para la imagen */
+            height: 250px;      /* 🎉 Nuevo: Alto fijo para la imagen */
+            max-width: 100%; 
+            border-radius: 4px; 
+            margin-bottom: 10px; 
+            /* CRUCIAL: Asegura que el contenido se ajuste sin recortar, usando el relleno */
+            object-fit: contain;
+            /* Añade el fondo blanco si el contenedor es más grande (aunque con width/height 250px ya no es tan necesario, es buena práctica) */
+            background-color: whitesmoke; 
+        }
         .cta-button { 
             display: block; 
             background-color: #007bff; 
@@ -26,6 +36,31 @@
             border-radius: 5px; 
             margin-top: 15px;
             cursor: pointer;
+        }
+        /* Estilos para ocultar el carrito por defecto en la versión JS */
+        .cart-summary-area.hidden { 
+        display: none; 
+        } /* Estilos del botón flotante */
+        .toggle-cart-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #dc3545; /* Color llamativo (rojo) */
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 24px;
+        line-height: 50px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        z-index: 1000; /* Asegura que esté por encima de otros elementos */
+        transition: background-color 0.3s;
+        }
+        .toggle-cart-btn:hover {
+        background-color: #c82333;
         }
     </style>
 </head>
@@ -89,7 +124,7 @@
             </div>
         </section>
 
-        <aside class="cart-summary-area">
+            <aside id="cart-summary" class="cart-summary-area hidden">
             <!-- Título actualizado para mostrar el conteo de ítems del carrito -->
             <h2>Resumen del Pedido ({{ order.get_cart_items }} items)</h2>
             
@@ -145,9 +180,31 @@
         </div>
     </div>
     <div class="footer-bottom">
-        <p>&copy; 2025 MiTienda. Todos los derechos reservados.</p>
+        <p>&copy; 2025 Stelar. Todos los derechos reservados.</p>
     </div>
 </footer>
 
+<button id="toggle-cart-button" class="toggle-cart-btn" aria-label="Mostrar/Ocultar Carrito">🛒</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const cartSummary = document.getElementById('cart-summary');
+        const toggleButton = document.getElementById('toggle-cart-button');
+
+        // Esta verificación ahora será TRUE porque el ID está presente.
+        if (cartSummary && toggleButton) {
+            toggleButton.addEventListener('click', function() {
+                // Alterna la clase 'hidden' en el resumen del carrito
+                cartSummary.classList.toggle('hidden'); 
+                // Opcional: Cambiar el icono del botón si quieres que indique su estado
+                if (cartSummary.classList.contains('hidden')) {
+                    toggleButton.textContent = '🛒'; // Carrito oculto
+                } else {
+                    toggleButton.textContent = '✖️'; // Carrito visible (opción de cierre)
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>
