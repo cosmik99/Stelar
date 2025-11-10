@@ -1,5 +1,3 @@
-# store/models.py
-
 from django.db import models
 import datetime
 from PIL import Image 
@@ -52,6 +50,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
     description = models.CharField(max_length=250, default='', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/products/', blank=True, null=True)
+    stock = models.PositiveIntegerField(default=10)   # 🆕 NUEVO CAMPO: control de inventario
 
     # ---------------------------------------------------------------------
     # 🎉 LÓGICA DE REDIMENSIONAMIENTO A 250x250 CON RELLENO WHITESMOKE 🎉
@@ -113,6 +112,9 @@ class Product(models.Model):
             # 10. Guarda el modelo *otra vez*, actualizando SOLO el campo 'image'
             super().save(update_fields=['image'])
 
+    # 🆕 MÉTODO NUEVO: Comprobar si hay stock
+    def is_in_stock(self):
+        return self.stock > 0
 
     def __str__(self):
         return self.name

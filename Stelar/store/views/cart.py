@@ -53,9 +53,26 @@ class CartHandler(View):
         cart = request.session.get('cart', {})
 
         if product_id:
+            try:
+                product = Product.objects.get(id=product_id)
+            except Product.DoesNotExist:
+                messages.error(request, "El producto no existe.")
+                return redirect('cart')
+
             product_id = str(product_id)
             quantity = cart.get(product_id, 0)
 
+            # 🔴 Validación de stock
+            if not remove and not delete_all:
+                if product.stock == 0:
+                    messages.warning(request, f"❌ El producto '{product.name}' está agotado.")
+                    return redirect('cart')
+
+                if quantity >= product.stock:
+                    messages.warning(request, f"Solo quedan {product.stock} unidades disponibles de '{product.name}'.")
+                    return redirect('cart')
+
+            # 🔁 Lógica normal del carrito
             if delete_all:
                 # 🧨 Eliminar completamente el producto del carrito
                 if product_id in cart:

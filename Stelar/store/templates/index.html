@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stelar E-commerce</title>
     <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
-    {# Estilos básicos para el layout (pueden ser movidos a style.css) #}
     <style>
         .main-content-wrapper { display: flex; justify-content: space-between; gap: 20px; padding: 20px; }
         .product-list-area { flex: 3; }
@@ -14,18 +13,45 @@
         .cart-item-list p { margin: 5px 0; display: flex; justify-content: space-between; }
         .cart-item-list hr { margin: 10px 0; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .product-card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; text-align: center; }
-        .product-card img { 
-            width: 250px;       /* 🎉 Nuevo: Ancho fijo para la imagen */
-            height: 250px;      /* 🎉 Nuevo: Alto fijo para la imagen */
-            max-width: 100%; 
-            border-radius: 4px; 
-            margin-bottom: 10px; 
-            /* CRUCIAL: Asegura que el contenido se ajuste sin recortar, usando el relleno */
-            object-fit: contain;
-            /* Añade el fondo blanco si el contenedor es más grande (aunque con width/height 250px ya no es tan necesario, es buena práctica) */
-            background-color: whitesmoke; 
+
+        /* tarjeta */
+        .product-card { 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            border-radius: 8px; 
+            text-align: center; 
+            background-color: white; 
+            transition: transform 0.2s ease, box-shadow 0.2s ease; 
         }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        /* imagen clickeable */
+        .product-card .card-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px;
+            background: whitesmoke;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .product-card .card-image img { 
+            width: 250px; 
+            height: 250px; 
+            max-width: 100%; 
+            object-fit: contain; 
+            border-radius: 4px;
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover .card-image img { transform: scale(1.05); }
+
+        /* texto */
+        .product-card h3 { margin: 6px 0 8px; font-size: 1.05rem; }
+        .product-card .price { color: #007bff; font-weight: 600; margin-bottom: 12px; }
+
+        /* Botón principal "Añadir al Carrito" */
         .cta-button { 
             display: block; 
             background-color: #007bff; 
@@ -34,33 +60,39 @@
             text-align: center; 
             text-decoration: none; 
             border-radius: 5px; 
-            margin-top: 15px;
-            cursor: pointer;
+            margin-top: 15px; 
+            cursor: pointer; 
+            border: none; 
+            width: 100%; 
         }
-        /* Estilos para ocultar el carrito por defecto en la versión JS */
-        .cart-summary-area.hidden { 
-        display: none; 
-        } /* Estilos del botón flotante */
+        .cta-button:hover { background-color: #0056b3; }
+        .cta-button[disabled] { background-color: #6c757d; cursor: not-allowed; }
+
+        /* Oculta el carrito al inicio */
+        .cart-summary-area.hidden { display: none; }
+
+        /* Botón flotante del carrito */
         .toggle-cart-btn {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background-color: #dc3545; /* Color llamativo (rojo) */
-        color: white;
-        border: none;
-        cursor: pointer;
-        font-size: 24px;
-        line-height: 50px;
-        text-align: center;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        z-index: 1000; /* Asegura que esté por encima de otros elementos */
-        transition: background-color 0.3s;
+            position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
+            border-radius: 50%; background-color: #dc3545; color: white; border: none;
+            cursor: pointer; font-size: 24px; line-height: 50px; text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1000; transition: background-color 0.3s;
         }
-        .toggle-cart-btn:hover {
-        background-color: #c82333;
+        .toggle-cart-btn:hover { background-color: #c82333; }
+
+        /* Banner limpio sin deformarse */
+        .hero {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .banner-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -85,69 +117,59 @@
 </header>
 
 <main>
+    <!-- 🔹 Banner limpio -->
     <section class="hero">
-        <div class="hero-content">
-            <h1>Colección de Otoño</h1>
-            <p>Descubre las últimas tendencias con hasta 40% de descuento.</p>
-            <a href="{% url 'store' %}" class="cta-button">Comprar Ahora</a>
-        </div>
+        <img src="{% static 'store/images/banner.jpg' %}" alt="Banner principal" class="banner-img">
     </section>
 
     <div class="main-content-wrapper">
-        
         <section class="featured-products product-list-area">
             <h2>Productos Destacados</h2>
             <div class="product-grid">
-                
-                <!-- INICIO: Se ha reemplazado el HTML estático con el bucle dinámico -->
                 {% for product in products %}
                 <div class="product-card">
-                    <!-- Si tu modelo tiene un campo 'image', úsalo aquí. De lo contrario, usa un placeholder -->
-                    <img src="{% if product.image %}{{ product.image.url }}{% else %}https://placehold.co/300x300/e0e0e0/333333?text={{ product.name }}{% endif %}" alt="{{ product.name }}">
-                    
+                    <!-- 🟢 Imagen clickeable -->
+                    <a href="{% url 'product_detail' product.id %}" class="card-image" title="Ver {{ product.name }}">
+                        <img src="{% if product.image %}{{ product.image.url }}{% else %}https://placehold.co/300x300/e0e0e0/333333?text={{ product.name }}{% endif %}" alt="{{ product.name }}">
+                    </a>
+
                     <h3>{{ product.name }}</h3>
                     <p class="price">${{ product.price|floatformat:2 }}</p>
-                    
-                    <!-- Formulario para añadir al carrito, usando el ID del producto real -->
-                    <form action="{% url 'cart-action' %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="product" value="{{ product.id }}">
-                        <input type="hidden" name="return_url" value="{{ request.path }}">
-                        <button type="submit" class="cta-button">Añadir al Carrito</button>
-                    </form>
+
+                    {% if product.stock > 0 %}
+                        <form action="{% url 'cart-action' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="product" value="{{ product.id }}">
+                            <input type="hidden" name="return_url" value="{{ request.path }}">
+                            <button type="submit" class="cta-button">Añadir al Carrito</button>
+                        </form>
+                    {% else %}
+                        <button class="cta-button" disabled>Agotado</button>
+                    {% endif %}
                 </div>
                 {% empty %}
                 <p>No se encontraron productos en la base de datos.</p>
                 {% endfor %}
-                <!-- FIN: Bucle dinámico -->
-
             </div>
         </section>
 
-            <aside id="cart-summary" class="cart-summary-area hidden">
-            <!-- Título actualizado para mostrar el conteo de ítems del carrito -->
+        <aside id="cart-summary" class="cart-summary-area hidden">
             <h2>Resumen del Pedido ({{ order.get_cart_items }} items)</h2>
-            
             <div class="cart-item-list">
                 {% for item in items %}
-                    <p>
-                        <!-- Usamos truncatechars por si el nombre del producto es muy largo -->
-                        {{ item.product.name|truncatechars:20 }} x {{ item.quantity }}
+                    <p>{{ item.product.name|truncatechars:20 }} x {{ item.quantity }}
                         <span>${{ item.get_total|floatformat:2 }}</span>
                     </p>
                 {% empty %}
                     <p>Tu carrito está vacío. ¡Empieza a comprar!</p>
                 {% endfor %}
             </div>
-            
             <hr>
-            
             {% if order.get_cart_items > 0 %}
                 <p class="fw-bold">Total: <span>${{ order.get_cart_total|floatformat:2 }}</span></p>
             {% else %}
                 <p class="fw-bold">Total: <span>$0.00</span></p>
             {% endif %}
-
             <hr>
             <a href="{% url 'cart' %}" class="cta-button">Proceder al Pago</a>
         </aside>
@@ -174,9 +196,7 @@
         </div>
         <div class="footer-section">
             <h4>Síguenos</h4>
-            <a href="#">Facebook</a> | 
-            <a href="#">Instagram</a> | 
-            <a href="#">Twitter</a>
+            <a href="#">Facebook</a> | <a href="#">Instagram</a> | <a href="#">Twitter</a>
         </div>
     </div>
     <div class="footer-bottom">
@@ -191,20 +211,14 @@
         const cartSummary = document.getElementById('cart-summary');
         const toggleButton = document.getElementById('toggle-cart-button');
 
-        // Esta verificación ahora será TRUE porque el ID está presente.
         if (cartSummary && toggleButton) {
             toggleButton.addEventListener('click', function() {
-                // Alterna la clase 'hidden' en el resumen del carrito
                 cartSummary.classList.toggle('hidden'); 
-                // Opcional: Cambiar el icono del botón si quieres que indique su estado
-                if (cartSummary.classList.contains('hidden')) {
-                    toggleButton.textContent = '🛒'; // Carrito oculto
-                } else {
-                    toggleButton.textContent = '✖️'; // Carrito visible (opción de cierre)
-                }
+                toggleButton.textContent = cartSummary.classList.contains('hidden') ? '🛒' : '✖️';
             });
         }
     });
 </script>
+
 </body>
 </html>

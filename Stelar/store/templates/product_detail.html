@@ -4,26 +4,52 @@
 {% block content %}
 <div class="container mt-4">
   <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-5 position-relative">
       <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded shadow">
+
+      {% if product.stock == 0 %}
+      <div class="sold-out-badge">AGOTADO</div>
+      {% endif %}
     </div>
+
     <div class="col-md-7">
       <h2>{{ product.name }}</h2>
       <p class="text-muted">{{ product.category.name }}</p>
       <p>{{ product.description }}</p>
       <h4 class="text-primary mb-4">${{ product.price }}</h4>
 
-      <!-- ✅ Formulario para agregar al carrito -->
-      <form action="{% url 'cart-action' %}" method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="product" value="{{ product.id }}">
-        <button type="submit" class="btn btn-success btn-lg">
-          🛒 Agregar al carrito
-        </button>
-      </form>
+      {% if product.stock > 0 %}
+        <form action="{% url 'cart-action' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="product" value="{{ product.id }}">
+          <button type="submit" class="btn btn-success btn-lg">
+            🛒 Agregar al carrito
+          </button>
+        </form>
+        <p class="mt-2 text-success fw-semibold">En stock: {{ product.stock }}</p>
+      {% else %}
+        <p class="text-danger fw-semibold">Producto agotado</p>
+        <button class="btn btn-secondary btn-lg" disabled>Agotado</button>
+      {% endif %}
 
       <a href="{% url 'store' %}" class="btn btn-outline-secondary mt-3">⬅ Volver a la tienda</a>
     </div>
   </div>
 </div>
+
+<style>
+.sold-out-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: rgba(255, 0, 0, 0.85);
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  z-index: 10;
+}
+</style>
 {% endblock %}
