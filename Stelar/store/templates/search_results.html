@@ -2,41 +2,41 @@
 {% block title %}Buscar - {{ query }}{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Resultados de búsqueda</h2>
+<div class="container mt-4 text-light">
+    <h2 class="mb-3 text-primary">Resultados de búsqueda</h2>
 
     <form method="get" action="{% url 'search' %}" class="my-3">
         <input type="search" name="q" placeholder="Buscar productos..." 
-               value="{{ query }}" class="form-control w-50 d-inline">
-        <button type="submit" class="btn btn-primary">Buscar</button>
+               value="{{ query }}" class="form-control w-50 d-inline bg-dark text-light border-secondary">
+        <button type="submit" class="btn btn-primary ms-2 px-4">Buscar</button>
     </form>
 
     {% if results %}
         <div class="row">
             {% for product in results %}
-                <div class="col-md-3 mb-3">
+                <div class="col-md-3 mb-4">
                     <div class="card h-100 product-card"
-                         onclick="window.location.href='{% url 'product_detail' product.id %}'">
+                         onclick="window.location.href='{% url 'product_detail' product.id %}'"
+                         style="background-color: #111827; color: #e5e7eb;">
+                        
                         {% if product.image %}
                             <div class="image-container position-relative">
                                 <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-                                
                                 {% if product.stock == 0 %}
-                                    <!-- 🟥 Etiqueta de Agotado -->
                                     <div class="sold-out-badge">AGOTADO</div>
                                 {% endif %}
                             </div>
                         {% endif %}
+                        
                         <div class="card-body">
-                            <h5 class="card-title">{{ product.name }}</h5>
-                            <p class="card-text">{{ product.description|truncatewords:20 }}</p>
+                            <h5 class="card-title text-info">{{ product.name }}</h5>
+                            <p class="card-text text-secondary">{{ product.description|truncatewords:20 }}</p>
                             
                             {% if product.stock > 0 %}
-                                <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-outline-primary">
-                                    Ver más
-                                </a>
+                                <a href="{% url 'product_detail' product.id %}" 
+                                   class="btn btn-sm btn-outline-primary">Ver más</a>
                             {% else %}
-                                <button class="btn btn-sm btn-secondary" disabled>Agotado</button>
+                                <button class="btn btn-sm btn-outline-secondary text-muted" disabled>Agotado</button>
                             {% endif %}
                         </div>
                     </div>
@@ -44,25 +44,35 @@
             {% endfor %}
         </div>
     {% else %}
-        <p>No se encontraron resultados.</p>
+        <p class="text-secondary mt-3">No se encontraron resultados para tu búsqueda.</p>
     {% endif %}
 </div>
 
 <style>
+body {
+    background-color: #0b0f19;
+    color: #e5e7eb;
+}
+
+/* ✨ Tarjeta de producto */
 .product-card {
     cursor: pointer;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     border: none;
     border-radius: 12px;
+    background: #111827;
     overflow: hidden;
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.2);
 }
 .product-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
 }
+
+/* 🌠 Imagen */
 .image-container {
     overflow: hidden;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
     position: relative;
 }
 .image-container img {
@@ -71,19 +81,40 @@
 .product-card:hover .image-container img {
     transform: scale(1.07);
 }
-/* 🟥 Estilo del badge de AGOTADO */
+
+/* 🩸 Badge de agotado */
 .sold-out-badge {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: rgba(255, 0, 0, 0.85);
-    color: white;
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+    color: #fff;
     font-weight: bold;
     font-size: 0.8rem;
     padding: 5px 10px;
     border-radius: 6px;
-    z-index: 5;
     text-transform: uppercase;
+}
+
+/* 🪐 Botones */
+.btn-primary {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    border: none;
+    transition: all 0.3s ease;
+}
+.btn-primary:hover {
+    background: linear-gradient(135deg, #1e40af, #2563eb);
+    transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+    border: 1px solid #3b82f6;
+    color: #3b82f6;
+    transition: all 0.3s ease;
+}
+.btn-outline-primary:hover {
+    background-color: #3b82f6;
+    color: #fff;
 }
 </style>
 {% endblock %}

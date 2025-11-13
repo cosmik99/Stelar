@@ -5,20 +5,20 @@
 {% block content %}
 <div class="row justify-content-center mt-5">
     <div class="col-md-6">
-        <div class="card shadow-sm border-0">
+        <div class="card shadow-sm border-0 stelar-card">
             <div class="card-body">
-                <h2 class="card-title text-center mb-4">Iniciar Sesión</h2>
+                <h2 class="card-title text-center mb-4 stelar-title">Iniciar Sesión</h2>
 
                 <!-- Mensajes de Django -->
                 {% if messages %}
                     {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        <div class="alert alert-{{ message.tags }} stelar-alert">{{ message }}</div>
                     {% endfor %}
                 {% endif %}
 
                 <!-- Mensajes de error manual -->
                 {% if error %}
-                    <div class="alert alert-danger text-center">{{ error }}</div>
+                    <div class="alert alert-danger text-center stelar-alert-error">{{ error }}</div>
                 {% endif %}
 
                 <form method="POST" action="{% url 'login' %}" id="loginForm">
@@ -29,27 +29,126 @@
                     {% endif %}
 
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email*</label>
-                        <input type="email" name="email" id="email" class="form-control"
+                        <label for="email" class="form-label stelar-label">Email*</label>
+                        <input type="email" name="email" id="email" class="form-control stelar-input"
                                value="{{ email|default:'' }}" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="password" class="form-label">Contraseña*</label>
-                        <input type="password" name="password" id="password" class="form-control" required>
+                        <label for="password" class="form-label stelar-label">Contraseña*</label>
+                        <input type="password" name="password" id="password" class="form-control stelar-input" required>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100 mt-3">Ingresar</button>
+                    <button type="submit" class="btn w-100 mt-3 stelar-btn">Ingresar</button>
                 </form>
 
-                <hr>
-                <p class="text-center">
-                    ¿No tienes una cuenta? <a href="{% url 'signup' %}">Regístrate aquí</a>
+                <hr class="stelar-divider">
+                <p class="text-center stelar-link-text">
+                    ¿No tienes una cuenta? <a href="{% url 'signup' %}" class="stelar-link">Regístrate aquí</a>
                 </p>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+/* 🌌 Paleta de colores Stelar */
+:root {
+    --stelar-bg: #0b0f2c;
+    --stelar-card-bg: #11163a;
+    --stelar-accent: #2b6be4;
+    --stelar-light: #cfdcff;
+    --stelar-text: #e4e8ff;
+    --stelar-error: #e94b4b;
+    --stelar-border: rgba(255, 255, 255, 0.1);
+}
+
+/* Fondo general */
+body {
+    background: radial-gradient(circle at 30% 20%, #141a3a, #090c24 80%);
+    color: var(--stelar-text);
+}
+
+/* Tarjeta principal */
+.stelar-card {
+    background: var(--stelar-card-bg);
+    border-radius: 10px;
+    border: 1px solid var(--stelar-border);
+    box-shadow: 0 0 15px rgba(25, 50, 150, 0.3);
+}
+
+/* Título */
+.stelar-title {
+    color: var(--stelar-light);
+    text-shadow: 0 0 6px rgba(90, 140, 255, 0.5);
+}
+
+/* Labels */
+.stelar-label {
+    color: var(--stelar-light);
+}
+
+/* Inputs */
+.stelar-input {
+    background-color: #0f1330;
+    border: 1px solid var(--stelar-border);
+    color: var(--stelar-text);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+.stelar-input:focus {
+    border-color: var(--stelar-accent);
+    box-shadow: 0 0 10px rgba(43, 107, 228, 0.3);
+    outline: none;
+}
+
+/* Botón principal */
+.stelar-btn {
+    background: linear-gradient(135deg, var(--stelar-accent), #4361ee);
+    border: none;
+    color: white;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+.stelar-btn:hover {
+    background: linear-gradient(135deg, #4e7cff, #3a57d1);
+    box-shadow: 0 0 12px rgba(90, 140, 255, 0.4);
+}
+
+/* Enlaces */
+.stelar-link {
+    color: var(--stelar-accent);
+    text-decoration: none;
+    font-weight: 500;
+}
+.stelar-link:hover {
+    color: #6b8dff;
+}
+
+/* Divider */
+.stelar-divider {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Alertas */
+.stelar-alert {
+    background: rgba(40, 60, 120, 0.3);
+    border: 1px solid var(--stelar-border);
+    color: var(--stelar-light);
+}
+.stelar-alert-error {
+    background: rgba(233, 75, 75, 0.15);
+    border: 1px solid var(--stelar-error);
+    color: #ff9c9c;
+}
+
+/* Textos */
+.stelar-link-text {
+    color: var(--stelar-light);
+}
+</style>
 
 <script>
 document.getElementById("loginForm").addEventListener("submit", function() {

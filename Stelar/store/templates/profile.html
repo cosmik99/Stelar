@@ -2,13 +2,55 @@
 {% block title %}Perfil de Usuario{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="card shadow-sm p-4">
-        <h2 class="mb-3">Perfil de {{ customer.first_name }} {{ customer.last_name }}</h2>
-        <p><strong>Email:</strong> {{ customer.email }}</p>
+<div class="container mt-5 text-light">
+    <div class="card shadow-lg border-0 p-4" style="background-color: #111827;">
+        <h2 class="mb-3 text-primary">Perfil de {{ customer.first_name }} {{ customer.last_name }}</h2>
+        <p><strong class="text-info">Email:</strong> {{ customer.email }}</p>
 
-        <hr>
-        <a href="{% url 'logout' %}" class="btn btn-danger">Cerrar sesión</a>
+        <hr class="border-secondary">
+        <a href="{% url 'logout' %}" class="btn btn-outline-danger px-4 py-2">
+            🚪 Cerrar sesión
+        </a>
     </div>
 </div>
+
+<style>
+/* 🌌 Fondo general */
+body {
+    background-color: #0b0f19;
+    color: #e5e7eb;
+}
+
+/* 🪐 Tarjeta principal */
+.card {
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+}
+
+/* ✨ Texto */
+.text-primary {
+    color: #3b82f6 !important;
+}
+.text-info {
+    color: #60a5fa !important;
+}
+
+/* 🔘 Botón cerrar sesión */
+.btn-outline-danger {
+    color: #f87171;
+    border: 1px solid #f87171;
+    transition: all 0.3s ease;
+}
+.btn-outline-danger:hover {
+    background-color: #ef4444;
+    color: #fff;
+    border-color: #ef4444;
+    transform: translateY(-2px);
+}
+
+/* 🌠 Detalles */
+hr {
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+</style>
 {% endblock %}

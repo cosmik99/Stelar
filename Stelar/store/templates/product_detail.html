@@ -2,47 +2,62 @@
 {% block title %}{{ product.name }} - {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container mt-4 text-light">
   <div class="row">
+    <!-- 📸 Imagen del producto -->
     <div class="col-md-5 position-relative">
       <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded shadow">
-
       {% if product.stock == 0 %}
       <div class="sold-out-badge">AGOTADO</div>
       {% endif %}
     </div>
 
+    <!-- 🛍️ Detalle del producto -->
     <div class="col-md-7">
-      <h2>{{ product.name }}</h2>
+      <h2 class="text-primary">{{ product.name }}</h2>
       <p class="text-muted">{{ product.category.name }}</p>
       <p>{{ product.description }}</p>
-      <h4 class="text-primary mb-4">${{ product.price }}</h4>
+      <h4 class="text-info mb-4">${{ product.price }}</h4>
 
       {% if product.stock > 0 %}
         <form action="{% url 'cart-action' %}" method="POST">
           {% csrf_token %}
           <input type="hidden" name="product" value="{{ product.id }}">
-          <button type="submit" class="btn btn-success btn-lg">
+          <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm border-0">
             🛒 Agregar al carrito
           </button>
         </form>
         <p class="mt-2 text-success fw-semibold">En stock: {{ product.stock }}</p>
       {% else %}
-        <p class="text-danger fw-semibold">Producto agotado</p>
-        <button class="btn btn-secondary btn-lg" disabled>Agotado</button>
+        <p class="text-warning fw-semibold">Producto agotado</p>
+        <button class="btn btn-secondary btn-lg w-100" disabled>Agotado</button>
       {% endif %}
 
-      <a href="{% url 'store' %}" class="btn btn-outline-secondary mt-3">⬅ Volver a la tienda</a>
+      <a href="{% url 'store' %}" class="btn btn-outline-light mt-3">⬅ Volver a la tienda</a>
     </div>
   </div>
 </div>
 
 <style>
+/* 🌌 Fondo y texto base */
+body {
+  background-color: #0b0f19;
+  color: #e5e7eb;
+}
+
+/* 🪐 Tarjeta de imagen */
+img.img-fluid {
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+  background-color: #111827;
+}
+
+/* 💫 Etiqueta AGOTADO */
 .sold-out-badge {
   position: absolute;
   top: 12px;
   right: 12px;
-  background-color: rgba(255, 0, 0, 0.85);
+  background-color: rgba(220, 38, 38, 0.9);
   color: #fff;
   font-weight: bold;
   font-size: 0.9rem;
@@ -50,6 +65,49 @@
   border-radius: 8px;
   text-transform: uppercase;
   z-index: 10;
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.3);
+}
+
+/* 🩵 Botones */
+.btn-primary {
+  background-color: #3b82f6;
+  color: #fff;
+  transition: 0.3s;
+}
+.btn-primary:hover {
+  background-color: #60a5fa;
+  transform: translateY(-2px);
+}
+.btn-outline-light {
+  border: 1px solid #3b82f6;
+  color: #93c5fd;
+  transition: 0.3s;
+}
+.btn-outline-light:hover {
+  background-color: #1e3a8a;
+  color: #fff;
+  border-color: #60a5fa;
+}
+.btn-secondary {
+  background-color: #374151;
+  color: #9ca3af;
+}
+
+/* 🌠 Tipografía y colores secundarios */
+.text-primary {
+  color: #3b82f6 !important;
+}
+.text-info {
+  color: #60a5fa !important;
+}
+.text-muted {
+  color: #9ca3af !important;
+}
+.text-success {
+  color: #10b981 !important;
+}
+.text-warning {
+  color: #facc15 !important;
 }
 </style>
 {% endblock %}

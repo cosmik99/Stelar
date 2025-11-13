@@ -4,49 +4,57 @@
 {% block title %}Registro - {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-5 text-light">
   <div class="row justify-content-center">
     <div class="col-md-6">
-      <div class="card shadow border-0">
-        <div class="card-body">
-          <h3 class="text-center mb-4">Crear Cuenta</h3>
+      <div class="card shadow-lg border-0" style="background-color: #111827; border-radius: 16px;">
+        <div class="card-body p-4">
+          <h3 class="text-center mb-4 text-primary">Crear Cuenta</h3>
 
           <form method="POST" action="{% url 'signup' %}" id="signupForm">
             {% csrf_token %}
 
-            
             <div class="mb-3">
-              <label for="id_first_name" class="form-label">Nombre</label>
-              <input type="text" name="first_name" id="id_first_name" class="form-control" required>
+              <label for="id_first_name" class="form-label text-info">Nombre</label>
+              <input type="text" name="first_name" id="id_first_name" 
+                     class="form-control bg-dark text-light border-secondary" required>
             </div>
 
             <div class="mb-3">
-              <label for="id_last_name" class="form-label">Apellido</label>
-              <input type="text" name="last_name" id="id_last_name" class="form-control" required>
+              <label for="id_last_name" class="form-label text-info">Apellido</label>
+              <input type="text" name="last_name" id="id_last_name" 
+                     class="form-control bg-dark text-light border-secondary" required>
             </div>
 
             <div class="mb-3">
-              <label for="id_phone" class="form-label">Teléfono</label>
-              <input type="text" name="phone" id="id_phone" class="form-control" required>
+              <label for="id_phone" class="form-label text-info">Teléfono</label>
+              <input type="text" name="phone" id="id_phone" 
+                     class="form-control bg-dark text-light border-secondary" required>
             </div>
 
             <div class="mb-3">
-              <label for="id_email" class="form-label">Correo</label>
-              <input type="email" name="email" id="id_email" class="form-control" required>
+              <label for="id_email" class="form-label text-info">Correo</label>
+              <input type="email" name="email" id="id_email" 
+                     class="form-control bg-dark text-light border-secondary" required>
             </div>
 
             <div class="mb-3">
-              <label for="id_password" class="form-label">Contraseña</label>
-              <input type="password" name="password" id="id_password" class="form-control" required>
+              <label for="id_password" class="form-label text-info">Contraseña</label>
+              <input type="password" name="password" id="id_password" 
+                     class="form-control bg-dark text-light border-secondary" required>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+            <button type="submit" class="btn btn-primary w-100 mt-3 fw-semibold">
+              Registrarse
+            </button>
           </form>
 
-          <hr>
-          <p class="text-center">
+          <hr class="border-secondary mt-4">
+          <p class="text-center text-secondary">
             ¿Ya tienes una cuenta?
-            <a href="{% url 'login' %}">Inicia sesión</a>
+            <a href="{% url 'login' %}" class="text-info text-decoration-none fw-semibold">
+              Inicia sesión
+            </a>
           </p>
         </div>
       </div>
@@ -54,13 +62,53 @@
   </div>
 </div>
 
-
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   const form = document.getElementById("signupForm");
   form.addEventListener("submit", function(e) {
-    console.log("🚀 Enviando formulario...");
+    console.log("🚀 Enviando formulario de registro...");
   });
 });
 </script>
+
+<style>
+body {
+  background-color: #0b0f19;
+  color: #e5e7eb;
+}
+
+/* 🌌 Tarjeta principal */
+.card {
+  box-shadow: 0 0 18px rgba(59, 130, 246, 0.3);
+  transition: all 0.3s ease;
+}
+.card:hover {
+  box-shadow: 0 0 28px rgba(96, 165, 250, 0.4);
+}
+
+/* ✨ Campos de formulario */
+.form-control {
+  border-radius: 10px;
+  padding: 10px 14px;
+  transition: all 0.3s ease;
+}
+.form-control:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
+}
+
+/* 🪐 Botón de registro */
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+</style>
 {% endblock %}

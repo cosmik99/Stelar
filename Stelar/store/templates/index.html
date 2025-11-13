@@ -7,93 +7,203 @@
     <title>Stelar E-commerce</title>
     <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
     <style>
-        .main-content-wrapper { display: flex; justify-content: space-between; gap: 20px; padding: 20px; }
-        .product-list-area { flex: 3; }
-        .cart-summary-area { flex: 1; min-width: 300px; padding: 20px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; }
-        .cart-item-list p { margin: 5px 0; display: flex; justify-content: space-between; }
-        .cart-item-list hr { margin: 10px 0; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-
-        /* tarjeta */
-        .product-card { 
-            border: 1px solid #ddd; 
-            padding: 15px; 
-            border-radius: 8px; 
-            text-align: center; 
-            background-color: white; 
-            transition: transform 0.2s ease, box-shadow 0.2s ease; 
+      
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: #111827;
+            --bg-light: #1f2937;
+            --primary: #3b82f6;
+            --primary-light: #60a5fa;
+            --text-main: #f1f5f9;
+            --text-muted: #9ca3af;
+            --border-color: #1f2937;
         }
-        .product-card:hover { transform: translateY(-4px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        /* imagen clickeable */
-        .product-card .card-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 8px;
-            background: whitesmoke;
-            border-radius: 6px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            overflow: hidden;
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
         }
-        .product-card .card-image img { 
-            width: 250px; 
-            height: 250px; 
-            max-width: 100%; 
-            object-fit: contain; 
-            border-radius: 4px;
-            transition: transform 0.3s ease;
+
+        /* NAVBAR */
+        .navbar {
+            background-color: var(--bg-card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
         }
-        .product-card:hover .card-image img { transform: scale(1.05); }
-
-        /* texto */
-        .product-card h3 { margin: 6px 0 8px; font-size: 1.05rem; }
-        .product-card .price { color: #007bff; font-weight: 600; margin-bottom: 12px; }
-
-        /* Botón principal "Añadir al Carrito" */
-        .cta-button { 
-            display: block; 
-            background-color: #007bff; 
-            color: white; 
-            padding: 10px; 
-            text-align: center; 
-            text-decoration: none; 
-            border-radius: 5px; 
-            margin-top: 15px; 
-            cursor: pointer; 
-            border: none; 
-            width: 100%; 
+        .navbar .logo {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.3rem;
         }
-        .cta-button:hover { background-color: #0056b3; }
-        .cta-button[disabled] { background-color: #6c757d; cursor: not-allowed; }
-
-        /* Oculta el carrito al inicio */
-        .cart-summary-area.hidden { display: none; }
-
-        /* Botón flotante del carrito */
-        .toggle-cart-btn {
-            position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
-            border-radius: 50%; background-color: #dc3545; color: white; border: none;
-            cursor: pointer; font-size: 24px; line-height: 50px; text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1000; transition: background-color 0.3s;
+        .nav-links a,
+        .nav-icons a {
+            color: var(--text-main);
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s;
         }
-        .toggle-cart-btn:hover { background-color: #c82333; }
+        .nav-links a:hover,
+        .nav-icons a:hover {
+            color: var(--primary-light);
+        }
 
-        /* Banner limpio sin deformarse */
+        /* HERO */
         .hero {
             width: 100%;
-            overflow: hidden;
             border-radius: 8px;
+            overflow: hidden;
             margin-bottom: 30px;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
         }
         .banner-img {
             width: 100%;
             height: auto;
             display: block;
             object-fit: cover;
-            border-radius: 8px;
         }
+
+        /* PRODUCTOS */
+        .main-content-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 20px;
+        }
+        .product-list-area { flex: 3; }
+        .cart-summary-area {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-main);
+        }
+        .cart-item-list p {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+        }
+        .cart-item-list hr {
+            border-color: var(--border-color);
+        }
+
+        /* Tarjeta de producto */
+        .product-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            text-align: center;
+            padding: 15px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+        }
+        .product-card h3 {
+            color: var(--text-main);
+        }
+        .product-card .price {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        /* Imagen clickeable */
+        .card-image {
+            background: var(--bg-light);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px;
+            overflow: hidden;
+        }
+        .card-image img {
+            width: 250px;
+            height: 250px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover .card-image img {
+            transform: scale(1.05);
+        }
+
+        /* Botones */
+        .cta-button {
+            display: block;
+            background-color: var(--primary);
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+            width: 100%;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .cta-button:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        .cta-button[disabled] {
+            background-color: #475569;
+            color: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        /* Botón flotante del carrito */
+        .toggle-cart-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            font-size: 26px;
+            line-height: 55px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+            cursor: pointer;
+            z-index: 1000;
+            transition: background 0.3s;
+        }
+        .toggle-cart-btn:hover {
+            background-color: var(--primary-light);
+        }
+
+        /* Footer */
+        .site-footer {
+            background-color: var(--bg-card);
+            color: var(--text-muted);
+            padding: 40px 0 20px;
+            margin-top: 40px;
+        }
+        .site-footer h4 {
+            color: var(--primary-light);
+        }
+        .site-footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+        .site-footer a:hover {
+            color: var(--primary-light);
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 10px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Ocultar carrito al inicio */
+        .cart-summary-area.hidden { display: none; }
     </style>
 </head>
 <body>
@@ -117,7 +227,6 @@
 </header>
 
 <main>
-    <!-- 🔹 Banner limpio -->
     <section class="hero">
         <img src="{% static 'store/images/banner.jpg' %}" alt="Banner principal" class="banner-img">
     </section>
@@ -128,9 +237,8 @@
             <div class="product-grid">
                 {% for product in products %}
                 <div class="product-card">
-                    <!-- 🟢 Imagen clickeable -->
                     <a href="{% url 'product_detail' product.id %}" class="card-image" title="Ver {{ product.name }}">
-                        <img src="{% if product.image %}{{ product.image.url }}{% else %}https://placehold.co/300x300/e0e0e0/333333?text={{ product.name }}{% endif %}" alt="{{ product.name }}">
+                        <img src="{% if product.image %}{{ product.image.url }}{% else %}https://placehold.co/300x300/1f2937/f1f5f9?text={{ product.name }}{% endif %}" alt="{{ product.name }}">
                     </a>
 
                     <h3>{{ product.name }}</h3>
@@ -165,11 +273,7 @@
                 {% endfor %}
             </div>
             <hr>
-            {% if order.get_cart_items > 0 %}
-                <p class="fw-bold">Total: <span>${{ order.get_cart_total|floatformat:2 }}</span></p>
-            {% else %}
-                <p class="fw-bold">Total: <span>$0.00</span></p>
-            {% endif %}
+            <p class="fw-bold">Total: <span>${{ order.get_cart_total|floatformat:2 }}</span></p>
             <hr>
             <a href="{% url 'cart' %}" class="cta-button">Proceder al Pago</a>
         </aside>

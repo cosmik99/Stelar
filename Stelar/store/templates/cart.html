@@ -4,13 +4,13 @@
 {% block title %}Carrito de Compras - {{ block.super }}{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">Tu Carrito de Compras</h2>
+<h2 class="mb-4 text-light">Tu Carrito de Compras</h2>
 
 <div class="row">
     <div class="col-lg-8">
         {% if items %}
             {% for item in items %}
-            <div class="card mb-3 shadow-sm border-0">
+            <div class="card mb-3 border-0 shadow-sm bg-dark text-light">
                 <div class="row g-0 align-items-center">
                     <div class="col-md-3 d-flex justify-content-center align-items-center p-3">
                         <div class="product-image-wrapper">
@@ -24,26 +24,29 @@
                     </div>
                     <div class="col-md-9">
                         <div class="card-body">
-                            <h5 class="card-title">{{ item.product.name }}</h5>
-                            <p class="card-text fw-bold mb-1">Precio: ${{ item.product.price }}</p>
+                            <h5 class="card-title text-info">{{ item.product.name }}</h5>
+                            <p class="card-text fw-bold mb-1 text-secondary">Precio: ${{ item.product.price }}</p>
                             <p class="card-text fw-bold text-primary mb-3">Subtotal: ${{ item.get_total }}</p>
 
-                            
                             <form action="{% url 'cart-action' %}" method="POST" class="d-flex align-items-center gap-2">
                                 {% csrf_token %}
                                 <input type="hidden" name="product" value="{{ item.product.id }}">
 
                                 <!-- Botón para disminuir cantidad -->
-                                <button type="submit" name="remove" value="True" class="btn btn-outline-danger btn-sm">−</button>
+                                <button type="submit" name="remove" value="True" class="btn btn-outline-danger btn-sm">
+                                    −
+                                </button>
 
                                 <!-- Mostrar cantidad actual -->
-                                <span class="mx-2 fw-bold">{{ item.quantity }}</span>
+                                <span class="mx-2 fw-bold text-light">{{ item.quantity }}</span>
 
                                 <!-- Botón para aumentar cantidad -->
-                                <button type="submit" class="btn btn-outline-success btn-sm">＋</button>
+                                <button type="submit" class="btn btn-outline-success btn-sm">
+                                    ＋
+                                </button>
 
                                 <!-- Botón para eliminar todas las unidades -->
-                                <button type="submit" name="delete_all" value="True" class="btn btn-sm btn-danger ms-auto">
+                                <button type="submit" name="delete_all" value="True" class="btn btn-sm btn-outline-danger ms-auto">
                                     Eliminar todo
                                 </button>
                             </form>
@@ -53,42 +56,47 @@
             </div>
             {% endfor %}
         {% else %}
-            <div class="alert alert-info" role="alert">
+            <div class="alert alert-info bg-gradient text-dark border-0" role="alert">
                 Tu carrito está vacío. 
-                <a href="{% url 'index' %}" class="alert-link">¡Empieza a comprar!</a>
+                <a href="{% url 'index' %}" class="alert-link text-primary">¡Empieza a comprar!</a>
             </div>
         {% endif %}
     </div>
 
-    
     <div class="col-lg-4">
-        <div class="card shadow-sm border-0">
+        <div class="card shadow-sm border-0 bg-dark text-light">
             <div class="card-body">
-                <h4 class="card-title text-center mb-3">Resumen del Pedido</h4>
+                <h4 class="card-title text-center mb-3 text-info">Resumen del Pedido</h4>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <li class="list-group-item bg-dark text-light d-flex justify-content-between align-items-center">
                         Items
                         <span>{{ order.get_cart_items }}</span>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center fw-bold h5">
+                    <li class="list-group-item bg-dark text-light d-flex justify-content-between align-items-center fw-bold h5 border-top border-info">
                         Total
                         <span class="text-primary">${{ order.get_cart_total }}</span>
                     </li>
                 </ul>
-                <a href="{% url 'checkout' %}" class="btn btn-success btn-block">Proceder al Pago</a>
+                <a href="{% url 'checkout' %}" class="btn btn-primary w-100 mt-3 shadow">
+                    Proceder al Pago
+                </a>
             </div>
         </div>
     </div>
 </div>
 
 <style>
+body {
+    background-color: #0b0f1a; /* Fondo general tipo galaxia */
+}
+
 .product-image-wrapper {
     width: 130px;
     height: 130px;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-    background-color: #f8f9fa;
+    box-shadow: 0 0 10px rgba(30, 144, 255, 0.4);
+    background-color: #101522;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -98,9 +106,44 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+}
+.product-image:hover {
+    transform: scale(1.05);
 }
 
-/* 📱 Adaptación móvil */
+/* Botones con brillo azul */
+.btn-outline-success {
+    color: #00bfff;
+    border-color: #00bfff;
+}
+.btn-outline-success:hover {
+    background-color: #00bfff;
+    color: #fff;
+}
+
+.btn-outline-danger {
+    color: #ff4c4c;
+    border-color: #ff4c4c;
+}
+.btn-outline-danger:hover {
+    background-color: #ff4c4c;
+    color: #fff;
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, #007bff, #00bfff);
+    border: none;
+}
+.btn-primary:hover {
+    background: linear-gradient(90deg, #0056b3, #0095ff);
+}
+
+.list-group-item {
+    border: none;
+}
+
+/* Adaptación móvil */
 @media (max-width: 768px) {
     .product-image-wrapper {
         width: 100px;
